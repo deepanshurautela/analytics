@@ -1,0 +1,102 @@
+
+<!doctype html>
+<html>
+
+<head>
+	<title>{{ twitter_handle }}</title>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.3/Chart.min.js"></script>
+	<style>
+		canvas{
+			-moz-user-select: none;
+			-webkit-user-select: none;
+			-ms-user-select: none;
+		}
+	</style>
+</head>
+
+<body>
+	<div style="width:100%;">
+		<canvas id="canvas"></canvas>
+	</div>
+	<script>
+		points1 = [];
+		labels1 = [];
+
+		points2 = [];
+		labels2 = [];
+
+	{% for item in result %}
+		points1.push(parseFloat({{ item["analysis"]["pos"]}}));
+		labels1.push({{item["created_at"]}});
+
+		points2.push(parseFloat({{ item["analysis"]["neg"]}}));
+		labels2.push({{item["created_at"]}});
+
+	{% endfor %}
+
+		var config = {
+			type: 'line',
+			data: {
+				labels: labels1,
+				datasets: [{
+					label: 'Positive Scores',
+					backgroundColor: 'rgb(255, 99, 132)',
+					borderColor: 'rgb(255, 99, 132)',
+					data: points1,
+					fill: false,
+				}, 
+				{
+					label: 'Negative Scores',
+					backgroundColor: 'rgb(54, 162, 235)',
+					borderColor: 'rgb(54, 162, 235)',
+					data: points2,
+					fill: false,
+				},
+
+				//{
+				//label: 'Compound Scores',
+				//	backgroundColor: 'rgb(255, 159, 64)',
+				//	borderColor: 'rgb(255, 159, 64)',
+				//	data: points1,
+				//	fill: false,
+				//}
+				]
+			},
+
+			options: {
+				responsive: true,
+				title: {
+					display: true,
+					text: '{{twitter_handle}}'
+				},
+				
+				    scales: {
+				    yAxes:[{
+				            stacked:true,
+				        gridLines: {
+				            display:true,
+				          color:"rgba(255,99,132,0.2)"
+				        },
+				        ticks: {
+				           suggestedMax: 1,
+				           suggestedMin: 0
+				        }
+				    }],
+				    xAxes:[{
+				            gridLines: {
+				            display:true
+				        }
+				    }]
+  }
+			}
+		};
+
+		window.onload = function() {
+			var ctx = document.getElementById('canvas').getContext('2d');
+			window.myLine = new Chart(ctx, config);
+		};
+	
+	</script>
+</body>
+
+</html>
