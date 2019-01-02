@@ -1,5 +1,5 @@
-from flask import Flask, redirect, session, request, render_template
 import tweepy 
+from flask import Flask, redirect, session, request, render_template
 from twitter_sentiment import twitter_sentiment
 import json
 import os
