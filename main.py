@@ -3,6 +3,8 @@ import tweepy
 from twitter_sentiment import twitter_sentiment
 import json
 import os
+import pandas
+import random
 
 consumer_key = "MO84RWScQLb31dfQczBPb9g3J"								
 consumer_secret= "xy4GjgBAp9z3hJOz9Xw1i607eIGJgAEOy3CozSC6zCIaQq484M"								
@@ -10,9 +12,13 @@ consumer_secret= "xy4GjgBAp9z3hJOz9Xw1i607eIGJgAEOy3CozSC6zCIaQq484M"
 app = Flask(__name__)
 app.config['SECRET_KEY'] = os.urandom(10)
 
+
+df = pandas.read_csv("celeb.csv")
+rows = len(df.index)
+
 @app.route('/')
 def index():
-	return redirect("/search/@iamsrk/10")
+	return redirect("/search/@"+ df['twitter'][random.randint(1,rows)] +"/10")
 
 @app.route('/verifier/')
 def verify():
